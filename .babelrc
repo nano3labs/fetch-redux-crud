@@ -1,0 +1,8 @@
+{
+  "presets": [["env", {"modules": true}]],
+  "env": {
+    "test": {
+      "presets": [["env"], "react"]
+    }
+  }
+}
