@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 
-import { apiUrl } from '../../../src/lib/urls'
+// import { apiUrl } from '../api/urls'
 
 import {
   fetch,
@@ -10,7 +10,7 @@ import {
   update,
   destroy,
   actionTypesFor
-} from '../../../src/lib/api'
+} from '../api'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
