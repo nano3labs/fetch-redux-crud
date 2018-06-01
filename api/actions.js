@@ -4,7 +4,7 @@ import omit from 'lodash/omit'
 
 import request, { GET, POST, PUT, DELETE } from './request'
 import { transformKeys, parseValidationErrors, requestBody } from './utilities'
-import { wrapArray } from '../utilities'
+import { wrapArray } from '../lib/utilities'
 
 // Read action
 

@@ -1,6 +1,6 @@
 import { singular } from 'pluralize'
 import humps from 'humps'
-import { transformValidationErrors } from '../../lib/validation'
+import { transformValidationErrors } from '../lib/validation'
 
 export const transformKeys = (json, key) => {
   const items = json[key] || json[singular(key)]

@@ -1,4 +1,7 @@
-import { apiUrl, loginUrl } from '../../lib/urls'
+// TOOD: need to figure out an interface to make configuration possible
+const apiUrl = 'http://localhost:3001/api/v1'
+const loginUrl = '/login'
+// import { apiUrl, loginUrl } from '../../lib/urls'
 
 export const GET = 'GET'
 export const POST = 'POST'
@@ -28,7 +31,10 @@ export default (path, options = {}) => {
 
   if (!path) { throw new Error('No path specified') }
 
+  console.log('try to go to', `${apiUrl}/${path}`)
+
   return fetch(`${apiUrl}/${path}`, options)
     .then(handleErrors)
     .then(res => options.parseJson ? res.json() : res)
+    .catch(reason => console.log('failed with', reason))
 }
