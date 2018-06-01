@@ -1,7 +1,6 @@
-// TOOD: need to figure out an interface to make configuration possible
-const apiUrl = 'http://localhost:3001/api/v1'
-const loginUrl = '/login'
-// import { apiUrl, loginUrl } from '../../lib/urls'
+import { config } from '../settings'
+
+const { apiUrl, loginUrl } = config
 
 export const GET = 'GET'
 export const POST = 'POST'
