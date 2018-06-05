@@ -44,7 +44,7 @@ npm install --save fetch-redux-crud
 
 ```javascript
 // main.js
-import { configure } from 'fetch-redux-crud`
+import { configure } from 'fetch-redux-crud'
 
 configure.apiUrl = 'http://path.to.api.domain/api/v1'
 configure.loginUrl = 'http://path.to.login/page'
