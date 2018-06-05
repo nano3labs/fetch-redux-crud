@@ -2,7 +2,7 @@
 
 A simple library to help you keep your redux api code DRY.
 
-Instead of writing all the actions by hand, simply use:
+# Usage
 
 ```javascript
 // actions/users.js
