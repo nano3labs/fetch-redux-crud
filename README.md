@@ -27,6 +27,7 @@ export const getUsers = (state) => values(state.users.items)
 
 // returns users indexed by the user id, e.g. usage getUsersById(state)[1] <- gets user with id 1
 export const getUsersById = (state) => state.users.items
+```
 
 # install
 
