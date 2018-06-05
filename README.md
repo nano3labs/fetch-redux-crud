@@ -50,7 +50,7 @@ configure.apiUrl = 'http://path.to.api.domain/api/v1'
 configure.loginUrl = 'http://path.to.login/page'
 ```
 
-# Custom paths and actions
+# Custom REST Paths (Nested Paths)
 
 Often we need to use nested paths, for example, `GET /countries/:id/users`, in these cases you can simply pass in a `path` like so:
 
