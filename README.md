@@ -1,6 +1,6 @@
 # Fetch Redux Crud (Work In Progress)
 
-A simple library to keep your redux api code DRY. If you are using a RESTful api, you should be able to eliminate a lot of duplicated reducers. This extends the already excellent [redux-crud](https://github.com/Versent/redux-crud)
+A simple library to keep your redux api code DRY. If you are using a RESTful api, you should be able to eliminate a lot of duplicated reducers. This extends the already excellent [redux-crud](https://github.com/Versent/redux-crud) library.
 
 # Usage
 
@@ -59,3 +59,6 @@ Often we need to use nested paths, for example, `GET /countries/:id/users`, in t
 
 export const getUsersForCountry = (countryId) => fetch('users', { path: `/countries/${countryId}/users` })
 ```
+# Related Projects
+
+[Resourceful Components](https://github.com/mattvague/resourceful-components)
