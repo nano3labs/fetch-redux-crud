@@ -22,6 +22,7 @@
     "@types/redux": "^3.6.0",
     "humps": "^2.0.1",
     "lodash": "^4.17.5",
+    "pluralize": "^7.0.0",
     "redux": "^3.7.2",
     "redux-crud": "^3.2.0",
     "redux-thunk": "^2.2.0"
