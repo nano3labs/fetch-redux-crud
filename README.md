@@ -1,6 +1,6 @@
 # Fetch Redux Crud (Work In Progress)
 
-A simple library to help you keep your redux api code DRY.
+A simple library to keep your redux api code DRY. If you are using a RESTful api, you should be able to eliminate a lot of duplicated reducers. This extends the already excellent [redux-crud](https://github.com/Versent/redux-crud)
 
 # Usage
 
