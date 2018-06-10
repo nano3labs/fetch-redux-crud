@@ -1,6 +1,6 @@
 {
   "name": "fetch-redux-crud",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "DRY up your Redux API code by leveraging conventions in RESTful APIs. Don't write ugly code, just use fetch-redux-crud",
   "main": "./distribution/index.js",
   "scripts": {
@@ -19,8 +19,8 @@
   "homepage": "https://github.com/nano3labs/fetch-redux-crud",
   "repository": "github:nano3labs/fetch-redux-crud",
   "bugs": {
-    "url" : "https://github.com/nano3labs/fetch-redux-crud/issues",
-    "email" : "michael@nano3labs.com"
+    "url": "https://github.com/nano3labs/fetch-redux-crud/issues",
+    "email": "michael@nano3labs.com"
   },
   "author": "Michael Yagudaev",
   "license": "MIT",
