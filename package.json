@@ -1,7 +1,7 @@
 {
   "name": "fetch-redux-crud",
   "version": "0.0.5",
-  "description": "Make calling a redux API easy with a few lines of code you can connect your redux application to any restful API",
+  "description": "DRY up your Redux API code by leveraging conventions in RESTful APIs. Don't write ugly code, just use fetch-redux-crud",
   "main": "./distribution/index.js",
   "scripts": {
     "build": "babel src --out-dir distribution",
@@ -16,6 +16,12 @@
     "restful",
     "api"
   ],
+  "homepage": "https://github.com/nano3labs/fetch-redux-crud",
+  "repository": "github:nano3labs/fetch-redux-crud",
+  "bugs": {
+    "url" : "https://github.com/nano3labs/fetch-redux-crud/issues",
+    "email" : "michael@nano3labs.com"
+  },
   "author": "Michael Yagudaev",
   "license": "MIT",
   "dependencies": {
