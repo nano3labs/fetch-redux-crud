@@ -28,6 +28,7 @@ export const getUsers = (state) => values(state.users.items)
 // returns users indexed by the user id, e.g. usage getUsersById(state)[1] <- gets user with id 1
 export const getUsersById = (state) => state.users.items
 ```
+Note: the `resourceName` passed in the `fetch`, `create`, `update` or `destory` should match the string passed to `reducersFor`.
 
 # install
 
@@ -60,6 +61,55 @@ Often we need to use nested paths, for example, `GET /countries/:id/users`, in t
 
 export const getUsersForCountry = (countryId) => fetch('users', { path: `/countries/${countryId}/users` })
 ```
+
+# Customizing Reducers
+
+You can add additional reducers or modify the existing behavior of `fetch-redux-crud` reducers by using a switch statement like so:
+
+```
+// reducers/users.js
+import { actionTypesFor, reducersFor } from 'fetch-redux-crud'
+
+const users = (state, action) => {
+  const actionTypes = actionTypesFor('users')
+
+  switch (action.type) {
+  case actionTypes.fetchSuccess: // hook into the success action
+    console.log('fetch users success', action.record)
+    return reducersFor('users')(state, action)
+  default: // handle rest of the actions
+    return reducersFor('users')(state, action)
+  }
+}
+
+export default jobs
+```
+
+# Redux Action Types
+
+`fetch-redux-crud` automatically creates all the CRUD action types for interacting with your API. It even does optimistic updates for you. Below is a list of all the different actions we support.
+
+- `actionTypesFor(resourceName).<action_type>`
+     - `fetchStart` - a fetch has started
+     - `fetchSuccess` - an api fetch has returned successfully from the server
+     - `fetchFailed` - an api fetch request failed
+     
+     - `createStart` - a create has started
+     - `createSuccess` - an api create has returned successfully from the server
+     - `createFailed` - an api create request failed
+
+     - `updateStart` - an update has started
+     - `updateSuccess` - an api update has returned successfully from the server
+     - `updateFailed` - an api update request failed
+     
+     - `destroyStart` - a destroy has started
+     - `destroySuccess` - an api destroy has returned successfully from the server
+     - `destroyFailed` - an api destroy request failed
+     
+# Redux State Structure
+
+TODO: document internal redux structure
+
 # Related Projects
 
 * [Resourceful Components](https://github.com/mattvague/resourceful-components)
