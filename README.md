@@ -66,7 +66,7 @@ export const getUsersForCountry = (countryId) => fetch('users', { path: `/countr
 
 You can add additional reducers or modify the existing behavior of `fetch-redux-crud` reducers by using a switch statement like so:
 
-```
+```javascript
 // reducers/users.js
 import { actionTypesFor, reducersFor } from 'fetch-redux-crud'
 
