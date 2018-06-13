@@ -34,9 +34,11 @@ describe('async api actions', () => {
   })
 
   describe('#fetch', () => {
-    it('makes GET request and dispatches actions', () => {
-      fetchMock.get(`${apiUrl}/photos`, { photos: [{ id: 1, some_attr: 'yoooO123' }] })
+    beforeEach(() => {
+      fetchMock.get(`${apiUrl}/photos`, { photos: [{ id: 1, some_attr: 'yoooO123' }] }, { })
+    })
 
+    it('makes GET request and dispatches actions', () => {
       const expectedActions = [
         {
           type: actionTypes.fetchStart,
@@ -60,8 +62,6 @@ describe('async api actions', () => {
     })
 
     it('makes only allows a single request for the same url at a time', () => {
-      fetchMock.get(`${apiUrl}/photos`, { photos: [{ id: 1, some_attr: 'yoooO123' }] })
-
       const expectedActions = [
         {
           type: actionTypes.fetchStart,
@@ -213,6 +213,7 @@ describe('async api actions', () => {
         }
       ]
 
+      // TODO: persist is an undocumented option
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
@@ -336,7 +337,7 @@ describe('async api actions', () => {
   })
 
   it('optionally allows JSON key configuration', () => {
-    fetchMock.mock(`${apiUrl}/photos`, { photosBlarg: [{ id: 1, some_attr: 'yoooO123' }] })
+    fetchMock.get(`${apiUrl}/photos`, { photosBlarg: [{ id: 1, some_attr: 'yoooO123' }] })
 
     const expectedActions = [
       {
