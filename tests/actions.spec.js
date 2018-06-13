@@ -2,7 +2,9 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 
-import { apiUrl } from '../../../src/lib/urls'
+import { config } from '../src/settings'
+
+const apiUrl = config.apiUrl
 
 import {
   fetch,
@@ -10,7 +12,7 @@ import {
   update,
   destroy,
   actionTypesFor
-} from '../../../src/lib/api'
+} from '../src/index'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
@@ -52,8 +54,8 @@ describe('async api actions', () => {
 
       return store.dispatch(fetch('photos'))
         .then(resp => {
-          expect(resultActions(store)).to.eql(expectedActions)
-          expect(resp.records).to.eql([{ id: 1, someAttr: 'yoooO123' }])
+          expect(resultActions(store)).toEqual(expectedActions)
+          expect(resp.records).toEqual([{ id: 1, someAttr: 'yoooO123' }])
         })
     })
 
@@ -89,10 +91,10 @@ describe('async api actions', () => {
 
       store.dispatch(fetch('photos'))
 
-      expect(fetchMock.calls(`${apiUrl}/photos`).length).to.eql(1)
+      expect(fetchMock.calls(`${apiUrl}/photos`).length).toEqual(1)
 
       return store.dispatch(fetch('photos'))
-        .then(() => expect(resultActions(store)).to.eql(expectedActions))
+        .then(() => expect(resultActions(store)).toEqual(expectedActions))
     })
   })
 
@@ -120,7 +122,7 @@ describe('async api actions', () => {
 
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -145,7 +147,7 @@ describe('async api actions', () => {
 
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -161,7 +163,7 @@ describe('async api actions', () => {
 
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }))
         .catch((errors) => {
-          expect(errors).to.eql({ photo: { someAttr: 'is bs' } })
+          expect(errors).toEqual({ photo: { someAttr: 'is bs' } })
         })
     })
   })
@@ -189,7 +191,7 @@ describe('async api actions', () => {
 
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -213,7 +215,7 @@ describe('async api actions', () => {
 
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -229,7 +231,7 @@ describe('async api actions', () => {
 
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }))
         .catch((errors) => {
-          expect(errors).to.eql({ photo: { someAttr: 'is bs' } })
+          expect(errors).toEqual({ photo: { someAttr: 'is bs' } })
         })
     })
   })
@@ -257,7 +259,7 @@ describe('async api actions', () => {
 
       return store.dispatch(destroy('photos', { id: 1, someAttr: 'yoooO123' }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -283,7 +285,7 @@ describe('async api actions', () => {
 
       return store.dispatch(destroy('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
   })
@@ -308,7 +310,7 @@ describe('async api actions', () => {
     ]
 
     return store.dispatch(fetch('somePhotos'))
-      .then(() => expect(resultActions(store)).to.eql(expectedActions))
+      .then(() => expect(resultActions(store)).toEqual(expectedActions))
   })
 
   it('optionally allows path configuration', () => {
@@ -330,7 +332,7 @@ describe('async api actions', () => {
     ]
 
     return store.dispatch(fetch('photos', { path: 'images' }))
-      .then(() => expect(resultActions(store)).to.eql(expectedActions))
+      .then(() => expect(resultActions(store)).toEqual(expectedActions))
   })
 
   it('optionally allows JSON key configuration', () => {
@@ -352,6 +354,6 @@ describe('async api actions', () => {
     ]
 
     return store.dispatch(fetch('photos', { key: 'photosBlarg' }))
-      .then(() => expect(resultActions(store)).to.eql(expectedActions))
+      .then(() => expect(resultActions(store)).toEqual(expectedActions))
   })
 })
