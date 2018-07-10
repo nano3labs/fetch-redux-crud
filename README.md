@@ -30,7 +30,7 @@ export const getUsersById = (state) => state.users.items
 ```
 Note: the `resourceName` passed in the `fetch`, `create`, `update` or `destory` should match the string passed to `reducersFor`.
 
-# install
+# Install
 
 ```bash
 yarn add fetch-redux-crud
@@ -41,6 +41,13 @@ or
 ```bash
 npm install --save fetch-redux-crud
 ```
+
+# Features
+
+- Optimistic Updates
+- Automatic Updates to Redux Store
+- Saves Meta Data
+- Simple
 
 # Configure
 
@@ -106,9 +113,20 @@ export default jobs
      - `destroySuccess` - an api destroy has returned successfully from the server
      - `destroyFailed` - an api destroy request failed
      
-# Redux State Structure
+# Internal Redux State Structure
 
-TODO: document internal redux structure
+```
+{
+  resourceName: {
+    items: {
+      [id]: [object]
+    },
+    meta: {
+      // data about last fetch, errors, etc
+    }
+  }
+}
+```
 
 # Related Projects
 
