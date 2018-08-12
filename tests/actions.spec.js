@@ -153,6 +153,34 @@ describe('async api actions', () => {
         })
     })
 
+    it("optionally doesn't include root key", () => {
+      fetchMock.post(`${apiUrl}/photos`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.createStart,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        },
+        {
+          cid: 1,
+          type: actionTypes.createSuccess,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        }
+      ]
+
+      
+      return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }, { key: false }))
+        .then(() => {
+          expect(JSON.parse(fetchMock.lastCall()[1].body)).toEqual({ some_attr: 'yoooO123' })
+        })
+    })
+
     it('rejects the promise with validation errors if a 422 is returned', () => {
       fetchMock.post(`${apiUrl}/photos`, {
         status: 422,
@@ -218,6 +246,33 @@ describe('async api actions', () => {
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+
+    it("optionally doesn't include root key", () => {
+      fetchMock.put(`${apiUrl}/photos/1`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.createStart,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        },
+        {
+          cid: 1,
+          type: actionTypes.createSuccess,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        }
+      ]
+
+      return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { key: false }))
+        .then(() => {
+          expect(JSON.parse(fetchMock.lastCall()[1].body)).toEqual({ some_attr: 'yoooO123' })
         })
     })
 

@@ -5,8 +5,7 @@ import { singular } from 'pluralize'
 
 
 import request, { GET, POST, PUT, DELETE } from './request'
-import { transformKeys, parseValidationErrors, requestBody } from './utilities'
-import { wrapArray } from '../lib/utilities'
+import { wrapArray,  transformKeys, parseValidationErrors, requestBody } from '../lib/utilities'
 
 // Read action
 
@@ -54,7 +53,7 @@ export const fetch = (resourceName, options = {}) => dispatch => {
 
 export const create = (resourceName, record, options = { persist: true }) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const key = options.key || resourceName
+  const key = options.hasOwnProperty('key') ? (options.key && singular(options.key)) : singular(resourceName)
   const { id, ...recordWithOutId } = record
   const body = requestBody(recordWithOutId, key)
   const path = options.path || humps.decamelize(resourceName)
@@ -86,7 +85,7 @@ export const create = (resourceName, record, options = { persist: true }) => dis
 
 export const update = (resourceName, record, options = { persist: true }) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const key = options.key || resourceName
+  const key = options.hasOwnProperty('key') ? (options.key && singular(options.key)) : singular(resourceName)
   const { id, ...recordWithOutId } = record
   const body = requestBody(recordWithOutId, key)
   const path = options.path || [humps.decamelize(resourceName), id].join('/')
