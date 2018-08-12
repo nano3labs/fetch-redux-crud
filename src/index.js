@@ -16,5 +16,3 @@ export {
   lastUpdatedAt,
   isFetchingInitial
 } from './api/reducers'
-
-export { config } from './settings'

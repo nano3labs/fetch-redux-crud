@@ -56,7 +56,7 @@ npm install --save fetch-redux-crud
 import { config } from 'fetch-redux-crud'
 
 config.apiUrl = 'http://path.to.api.domain/api/v1'
-config.loginUrl = 'http://path.to.login/page'
+config.redirectUrl = 'http://path.to.login/page'
 ```
 
 # Custom REST Paths (Nested Paths)
