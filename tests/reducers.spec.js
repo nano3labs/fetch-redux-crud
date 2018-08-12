@@ -1,11 +1,11 @@
-import { reducersFor, actionTypesFor, metaInitialState } from '../../../src/lib/api'
+import { reducersFor, actionTypesFor, metaInitialState } from '../src'
 
 describe('#reducersFor', () => {
   const reducer = reducersFor('myFunResource')
   const types = actionTypesFor('myFunResource')
 
   it('should handle initial state', () => {
-    expect(reducer(undefined, {})).to.eql({
+    expect(reducer(undefined, {})).toEqual({
       meta: metaInitialState,
       items: {}
     })
@@ -27,7 +27,7 @@ describe('#reducersFor', () => {
       items: {}
     }
 
-    expect(reducer(stateBefore, { type: types.fetchStart })).to.eql(stateAfter)
+    expect(reducer(stateBefore, { type: types.fetchStart })).toEqual(stateAfter)
   })
 
   it('should handle fetchSuccess state', () => {
@@ -60,6 +60,6 @@ describe('#reducersFor', () => {
         { id: 2, blah: 'blarg' }
       ],
       receivedAt: date
-    })).to.eql(stateAfter)
+    })).toEqual(stateAfter)
   })
 })
