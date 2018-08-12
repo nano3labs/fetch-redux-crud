@@ -59,6 +59,18 @@ config.apiUrl = 'http://path.to.api.domain/api/v1'
 config.redirectUrl = 'http://path.to.login/page'
 ```
 
+# Removing root key in requests
+
+ Some API's are built such that requests and responses don't have a root JSON key. Of course, we account for that:
+
+ ```javascript
+ // actions/users.js
+
+ export const createUser = (countryId) => create('users', { name: 'Jim Beam' }, { key: false })
+ ```
+
+ Which will generate JSON request like `{ name: 'Jim Beam' }` and likewise understand a JSON response without a root key. This option works for all action types.
+
 # Custom REST Paths (Nested Paths)
 
 Often we need to use nested paths, for example, `GET /countries/:id/users`, in these cases you can simply pass in a `path` like so:

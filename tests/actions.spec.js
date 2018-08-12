@@ -98,6 +98,28 @@ describe('async api actions', () => {
       return store.dispatch(fetch('photos'))
         .then(() => expect(resultActions(store)).toEqual(expectedActions))
     })
+
+    it("optionally doesn't look for a root JSON key", () => {
+      fetchMock.get(`${apiUrl}/photos`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.fetchStart,
+          data: undefined
+        },
+        {
+          type: actionTypes.fetchSuccess,
+          data: undefined,
+          receivedAt: true,
+          records: [{
+            id: 1, someAttr: 'yoooO123'
+          }]
+        }
+      ]
+
+      return store.dispatch(fetch('photos', { key: false }))
+        .then(() => expect(resultActions(store)).toEqual(expectedActions))
+    })
   })
 
   describe('#create', () => {
@@ -150,6 +172,34 @@ describe('async api actions', () => {
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+
+    it("optionally doesn't include root key", () => {
+      fetchMock.post(`${apiUrl}/photos`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.createStart,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        },
+        {
+          cid: 1,
+          type: actionTypes.createSuccess,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        }
+      ]
+
+      
+      return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }, { key: false }))
+        .then(() => {
+          expect(JSON.parse(fetchMock.lastCall()[1].body)).toEqual({ some_attr: 'yoooO123' })
         })
     })
 
@@ -218,6 +268,33 @@ describe('async api actions', () => {
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+
+    it("optionally doesn't include root key", () => {
+      fetchMock.put(`${apiUrl}/photos/1`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.createStart,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        },
+        {
+          cid: 1,
+          type: actionTypes.createSuccess,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        }
+      ]
+
+      return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { key: false }))
+        .then(() => {
+          expect(JSON.parse(fetchMock.lastCall()[1].body)).toEqual({ some_attr: 'yoooO123' })
         })
     })
 
