@@ -6,7 +6,7 @@ A simple library to keep your redux api code DRY. If you are using a RESTful api
 
 ```javascript
 // actions/users.js
-imporot { fetch } from 'fetch-redux-crud'
+import { fetch } from 'fetch-redux-crud'
 
 export const fetchUser = () => fetch('users') // goes to GET `${config.apiUrl}/users`
 ```
