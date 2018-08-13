@@ -117,7 +117,7 @@ export default jobs
 
 ```
 {
-  <resourceName>: {
+  [resourceName]: {
     items: {
       [id]: [object]
     },
