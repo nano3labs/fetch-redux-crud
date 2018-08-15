@@ -2,16 +2,16 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 
-import { apiUrl } from '../../../src/lib/urls'
-
+import { config } from '../src/config'
 import {
   fetch,
   create,
   update,
   destroy,
   actionTypesFor
-} from '../../../src/lib/api'
+} from '../src'
 
+const { apiUrl } = config
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 let actionTypes = actionTypesFor('photos')
@@ -19,9 +19,8 @@ let actionTypes = actionTypesFor('photos')
 describe('async api actions', () => {
   let store
 
-  beforeEach(() => {
-    store = mockStore()
-  })
+  beforeEach(() => { store = mockStore() })
+  afterEach(() => { fetchMock.restore() })
 
   const resultActions = (store) => store.getActions().map(a => {
     if (a.receivedAt) {
@@ -52,8 +51,8 @@ describe('async api actions', () => {
 
       return store.dispatch(fetch('photos'))
         .then(resp => {
-          expect(resultActions(store)).to.eql(expectedActions)
-          expect(resp.records).to.eql([{ id: 1, someAttr: 'yoooO123' }])
+          expect(resultActions(store)).toEqual(expectedActions)
+          expect(resp.records).toEqual([{ id: 1, someAttr: 'yoooO123' }])
         })
     })
 
@@ -89,10 +88,54 @@ describe('async api actions', () => {
 
       store.dispatch(fetch('photos'))
 
-      expect(fetchMock.calls(`${apiUrl}/photos`).length).to.eql(1)
+      expect(fetchMock.calls(`${apiUrl}/photos`).length).toEqual(1)
 
       return store.dispatch(fetch('photos'))
-        .then(() => expect(resultActions(store)).to.eql(expectedActions))
+        .then(() => expect(resultActions(store)).toEqual(expectedActions))
+    })
+
+    it("optionally requests single record", () => {
+      fetchMock.get(`${apiUrl}/photos/1`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.fetchStart,
+          data: undefined
+        },
+        {
+          type: actionTypes.fetchSuccess,
+          data: undefined,
+          receivedAt: true,
+          records: [{
+            id: 1, someAttr: 'yoooO123'
+          }]
+        }
+      ]
+
+      return store.dispatch(fetch('photos', { id: 1 }, { key: false }))
+          .then(() => expect(resultActions(store)).toEqual(expectedActions))
+    })
+
+    it("optionally doesn't look for a root JSON key", () => {
+      fetchMock.get(`${apiUrl}/photos`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.fetchStart,
+          data: undefined
+        },
+        {
+          type: actionTypes.fetchSuccess,
+          data: undefined,
+          receivedAt: true,
+          records: [{
+            id: 1, someAttr: 'yoooO123'
+          }]
+        }
+      ]
+
+      return store.dispatch(fetch('photos', null, { key: false }))
+          .then(() => expect(resultActions(store)).toEqual(expectedActions))
     })
   })
 
@@ -120,7 +163,7 @@ describe('async api actions', () => {
 
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -145,8 +188,36 @@ describe('async api actions', () => {
 
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
+    })
+
+    it("optionally doesn't include root key", () => {
+      fetchMock.post(`${apiUrl}/photos`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.createStart,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        },
+        {
+          cid: 1,
+          type: actionTypes.createSuccess,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        }
+      ]
+      
+      return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }, { key: false }))
+        .then(() => {
+          expect(JSON.parse(fetchMock.lastCall()[1].body)).toEqual({ some_attr: 'yoooO123' })
+        })
+        .then(() => expect(resultActions(store)).toEqual(expectedActions))
     })
 
     it('rejects the promise with validation errors if a 422 is returned', () => {
@@ -161,14 +232,14 @@ describe('async api actions', () => {
 
       return store.dispatch(create('photos', { id: 1, someAttr: 'yoooO123' }))
         .catch((errors) => {
-          expect(errors).to.eql({ photo: { someAttr: 'is bs' } })
+          expect(errors).toEqual({ photo: { someAttr: 'is bs' } })
         })
     })
   })
 
   describe('#update', () => {
     it('creates PUT request and dispatches actions', () => {
-      fetchMock.put(`${apiUrl}/photos`, { photo: { id: 1, some_attr: 'yoooO123' } })
+      fetchMock.put(`${apiUrl}/photos/1`, { photo: { id: 1, some_attr: 'yoooO123' } })
 
       const expectedActions = [
         {
@@ -189,7 +260,7 @@ describe('async api actions', () => {
 
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -213,12 +284,39 @@ describe('async api actions', () => {
 
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
+    it("optionally doesn't include root key", () => {
+      fetchMock.put(`${apiUrl}/photos/1`, { id: 1, some_attr: 'yoooO123' })
+
+      const expectedActions = [
+        {
+          type: actionTypes.updateStart,
+          data: undefined,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        },
+        {
+          type: actionTypes.updateSuccess,
+          data: 1,
+          record: {
+            id: 1, someAttr: 'yoooO123'
+          }
+        }
+      ]
+
+      return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }, { key: false }))
+        .then(() => {
+          expect(JSON.parse(fetchMock.lastCall()[1].body)).toEqual({ some_attr: 'yoooO123' })
+        })
+        .then(() => expect(resultActions(store)).toEqual(expectedActions))
+    })
+
     it('rejects the promise with validation errors if a 422 is returned', () => {
-      fetchMock.put(`${apiUrl}/photos`, {
+      fetchMock.put(`${apiUrl}/photos/1`, {
         status: 422,
         body: {
           errors: {
@@ -229,14 +327,14 @@ describe('async api actions', () => {
 
       return store.dispatch(update('photos', { id: 1, someAttr: 'yoooO123' }))
         .catch((errors) => {
-          expect(errors).to.eql({ photo: { someAttr: 'is bs' } })
+          expect(errors).toEqual({ photo: { someAttr: 'is bs' } })
         })
     })
   })
 
   describe('#destroy', () => {
     it('creates DELETE request and dispatches actions', () => {
-      fetchMock.delete(`${apiUrl}/photos`, ' ')
+      fetchMock.delete(`${apiUrl}/photos/1`, ' ')
 
       const expectedActions = [
         {
@@ -257,7 +355,7 @@ describe('async api actions', () => {
 
       return store.dispatch(destroy('photos', { id: 1, someAttr: 'yoooO123' }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
@@ -283,7 +381,7 @@ describe('async api actions', () => {
 
       return store.dispatch(destroy('photos', { id: 1, someAttr: 'yoooO123' }, { persist: false }))
         .then(() => {
-          expect(store.getActions()).to.eql(expectedActions)
+          expect(store.getActions()).toEqual(expectedActions)
         })
     })
   })
@@ -308,7 +406,7 @@ describe('async api actions', () => {
     ]
 
     return store.dispatch(fetch('somePhotos'))
-      .then(() => expect(resultActions(store)).to.eql(expectedActions))
+      .then(() => expect(resultActions(store)).toEqual(expectedActions))
   })
 
   it('optionally allows path configuration', () => {
@@ -329,8 +427,8 @@ describe('async api actions', () => {
       }
     ]
 
-    return store.dispatch(fetch('photos', { path: 'images' }))
-      .then(() => expect(resultActions(store)).to.eql(expectedActions))
+    return store.dispatch(fetch('photos', null, { path: 'images' }))
+      .then(() => expect(resultActions(store)).toEqual(expectedActions))
   })
 
   it('optionally allows JSON key configuration', () => {
@@ -351,7 +449,7 @@ describe('async api actions', () => {
       }
     ]
 
-    return store.dispatch(fetch('photos', { key: 'photosBlarg' }))
-      .then(() => expect(resultActions(store)).to.eql(expectedActions))
+    return store.dispatch(fetch('photos', null, { key: 'photosBlarg' }))
+      .then(() => expect(resultActions(store)).toEqual(expectedActions))
   })
 })

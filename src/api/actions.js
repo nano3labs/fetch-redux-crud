@@ -1,15 +1,17 @@
 import reduxCrud from 'redux-crud'
 import humps from 'humps'
 import omit from 'lodash/omit'
+import compact from 'lodash/compact'
+import { singular } from 'pluralize'
 
 import request, { GET, POST, PUT, DELETE } from './request'
-import { transformKeys, parseValidationErrors, requestBody } from './utilities'
-import { wrapArray } from '../lib/utilities'
+import { wrapArray,  transformKeys, parseValidationErrors, requestBody } from '../lib/utilities'
 
 // Read action
 
-// Stores pending fetch request promises so we can eliminate duplicate requests
+// Store pending fetch request promises so we can eliminate duplicate requests
 let cachedFetchRequests = {}
+
 const clearCachedFetchRequest = (path) => (json) => {
   cachedFetchRequests = omit(cachedFetchRequests, path)
   return json
@@ -21,10 +23,11 @@ const fetchSuccessRequest = (action) => ({
   receivedAt: new Date()
 })
 
-export const fetch = (resourceName, options = {}) => dispatch => {
+export const fetch = (resourceName, record = {}, options = {}) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const key = options.key || resourceName
-  const path = options.path || humps.decamelize(resourceName)
+  const id = record && record.id
+  const key = options.hasOwnProperty('key') ? options.key : resourceName
+  const path = options.path || compact([humps.decamelize(resourceName), id]).join('/')
   const reduxCrudOptions = options.replace ? { replace: options.replace } : undefined
 
   dispatch(actionCreators.fetchStart())
@@ -51,7 +54,7 @@ export const fetch = (resourceName, options = {}) => dispatch => {
 
 export const create = (resourceName, record, options = { persist: true }) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const key = options.key || resourceName
+  const key = options.hasOwnProperty('key') ? (options.key && singular(options.key)) : singular(resourceName)
   const { id, ...recordWithOutId } = record
   const body = requestBody(recordWithOutId, key)
   const path = options.path || humps.decamelize(resourceName)
@@ -83,10 +86,10 @@ export const create = (resourceName, record, options = { persist: true }) => dis
 
 export const update = (resourceName, record, options = { persist: true }) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const key = options.key || resourceName
+  const key = options.hasOwnProperty('key') ? (options.key && singular(options.key)) : singular(resourceName)
   const { id, ...recordWithOutId } = record
   const body = requestBody(recordWithOutId, key)
-  const path = options.path || humps.decamelize(resourceName)
+  const path = options.path || compact([humps.decamelize(resourceName), id]).join('/')
 
   dispatch(actionCreators.updateStart(record))
 
@@ -115,7 +118,8 @@ export const update = (resourceName, record, options = { persist: true }) => dis
 
 export const destroy = (resourceName, record, options = { persist: true }) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const path = options.path || humps.decamelize(resourceName)
+  const id = record && record.id
+  const path = options.path || compact([humps.decamelize(resourceName), id]).join('/')
 
   dispatch(actionCreators.deleteStart(record))
 
