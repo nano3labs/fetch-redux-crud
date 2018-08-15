@@ -1,8 +1,8 @@
 import reduxCrud from 'redux-crud'
 import humps from 'humps'
 import omit from 'lodash/omit'
+import compact from 'lodash/compact'
 import { singular } from 'pluralize'
-
 
 import request, { GET, POST, PUT, DELETE } from './request'
 import { wrapArray,  transformKeys, parseValidationErrors, requestBody } from '../lib/utilities'
@@ -23,10 +23,11 @@ const fetchSuccessRequest = (action) => ({
   receivedAt: new Date()
 })
 
-export const fetch = (resourceName, options = {}) => dispatch => {
+export const fetch = (resourceName, record = {}, options = {}) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const key = options.key || resourceName
-  const path = options.path || humps.decamelize(resourceName)
+  const id = record && record.id
+  const key = options.hasOwnProperty('key') ? options.key : resourceName
+  const path = options.path || compact([humps.decamelize(resourceName), id]).join('/')
   const reduxCrudOptions = options.replace ? { replace: options.replace } : undefined
 
   dispatch(actionCreators.fetchStart())
@@ -88,7 +89,7 @@ export const update = (resourceName, record, options = { persist: true }) => dis
   const key = options.hasOwnProperty('key') ? (options.key && singular(options.key)) : singular(resourceName)
   const { id, ...recordWithOutId } = record
   const body = requestBody(recordWithOutId, key)
-  const path = options.path || [humps.decamelize(resourceName), id].join('/')
+  const path = options.path || compact([humps.decamelize(resourceName), id]).join('/')
 
   dispatch(actionCreators.updateStart(record))
 
@@ -117,7 +118,8 @@ export const update = (resourceName, record, options = { persist: true }) => dis
 
 export const destroy = (resourceName, record, options = { persist: true }) => dispatch => {
   const actionCreators = reduxCrud.actionCreatorsFor(resourceName)
-  const path = options.path || [humps.decamelize(resourceName), record.id].join('/')
+  const id = record && record.id
+  const path = options.path || compact([humps.decamelize(resourceName), id]).join('/')
 
   dispatch(actionCreators.deleteStart(record))
 
