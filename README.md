@@ -19,9 +19,6 @@ This library extends the already excellent [redux-crud](https://github.com/Verse
 // actions/users.js
 import { fetch, create, update, destroy } from 'fetch-redux-crud'
 
-// Fetch list of records
-export const fetchUser = () => fetch('users') // Makes API request to GET /users
-
 // Fetch single record
 export const fetchUser = () => fetch('users', { id: 99 }) // Makes API request to GET /users/99
 
@@ -153,7 +150,7 @@ For more information on reducers see https://github.com/Versent/redux-crud/blob/
 
 ```
 {
-  resourceName: {
+  [resourceName]: {
     items: {
       [id]: [object]
     },
