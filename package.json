@@ -1,6 +1,6 @@
 {
   "name": "fetch-redux-crud",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "DRY up your Redux API code by leveraging conventions in RESTful APIs. Don't write ugly code, just use fetch-redux-crud",
   "main": "./distribution/index.js",
   "scripts": {
