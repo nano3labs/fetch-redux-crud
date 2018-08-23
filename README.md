@@ -44,9 +44,10 @@ npm install --save fetch-redux-crud
 
 # Features
 
-- Optimistic Updates
-- Automatic Updates to Redux Store
-- Saves Meta Data
+- Optimistic updates
+- Automatic updates to Redux Store
+- Converts key casing like `author_id` to `authorId` (snake_case => camelCase)
+- Saves meta Data about requests
 - Simple
 
 # Configure
