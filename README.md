@@ -113,7 +113,7 @@ export default jobs
      - `fetchStart` - a fetch has started
      - `fetchSuccess` - an api fetch has returned successfully from the server
      - `fetchFailed` - an api fetch request failed
-     
+
      - `createStart` - a create has started
      - `createSuccess` - an api create has returned successfully from the server
      - `createFailed` - an api create request failed
@@ -121,11 +121,11 @@ export default jobs
      - `updateStart` - an update has started
      - `updateSuccess` - an api update has returned successfully from the server
      - `updateFailed` - an api update request failed
-     
+
      - `destroyStart` - a destroy has started
      - `destroySuccess` - an api destroy has returned successfully from the server
      - `destroyFailed` - an api destroy request failed
-     
+
 # Internal Redux State Structure
 
 ```
@@ -140,6 +140,29 @@ export default jobs
   }
 }
 ```
+
+# Contributing
+
+To contribute to the repo please make sure you run:
+
+```
+yarn install
+yarn test
+yarn build # try creating a build
+```
+
+Then simply submit a PR for your change and we will take a look.
+
+## Publishing to NPM
+
+To publish to npm run the following commands:
+
+```
+yarn build
+yarn publish
+```
+
+Make sure tagged version is pushed to origin/master properly.
 
 # Related Projects
 

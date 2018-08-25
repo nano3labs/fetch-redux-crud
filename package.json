@@ -7,7 +7,7 @@
     "build": "babel src --out-dir distribution",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepublish": "npm run build"
+    "prepublish": "yarn run build"
   },
   "keywords": [
     "fetch",
