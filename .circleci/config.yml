@@ -15,9 +15,10 @@ jobs: # a collection of steps
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run:
-          name: "JavaScript Linter"
-          command: yarn lint -- --format junit -o reports/junit/js-lint-results.xml
+    # TODO: add once we have a linter up
+    #   - run:
+    #       name: "JavaScript Linter"
+    #       command: yarn lint -- --format junit -o reports/junit/js-lint-results.xml
       - run:
           name: "JavaScript Test Suite"
           environment:
