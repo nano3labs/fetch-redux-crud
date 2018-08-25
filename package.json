@@ -5,9 +5,9 @@
   "main": "./distribution/index.js",
   "scripts": {
     "build": "babel src --out-dir distribution",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "prepublish": "npm run build"
+    "prepublish": "yarn run build"
   },
   "keywords": [
     "fetch",
@@ -46,6 +46,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "fetch-mock": "^6.5.2",
     "jest": "^23.1.0",
+    "jest-junit": "^5.1.0",
     "redux-mock-store": "^1.5.3"
   }
 }
