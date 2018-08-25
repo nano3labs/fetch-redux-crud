@@ -1,5 +1,7 @@
 # Fetch Redux Crud (Work In Progress)
 
+[![CircleCI](https://circleci.com/gh/nano3labs/fetch-redux-crud.svg?style=svg)](https://circleci.com/gh/nano3labs/fetch-redux-crud)
+
 A simple library to keep your redux api code DRY. If you are using a RESTful api, you should be able to eliminate a lot of duplicated reducers. This extends the already excellent [redux-crud](https://github.com/Versent/redux-crud) library.
 
 # Usage
