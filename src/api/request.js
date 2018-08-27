@@ -1,13 +1,11 @@
 import { config } from '../config'
 
-const { apiUrl, redirectUrl } = config
-
 export const GET = 'GET'
 export const POST = 'POST'
 export const PUT = 'PUT'
 export const DELETE = 'DELETE'
 
-const redirectToLogin = () => { window.location = redirectUrl }
+const redirectToLogin = () => { window.location = config.redirectUrl }
 
 const handleErrors = (res) => {
   if (res.status === 403) { redirectToLogin() }
@@ -16,6 +14,7 @@ const handleErrors = (res) => {
 }
 
 export default (path, options = {}) => {
+  const { apiUrl } = config
   const defaults = {
     credentials: 'include',
     persist: true,
