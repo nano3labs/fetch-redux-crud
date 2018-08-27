@@ -46,6 +46,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "fetch-mock": "^6.5.2",
     "jest": "^23.1.0",
+    "jest-fetch-mock": "^1.6.5",
     "jest-junit": "^5.1.0",
     "redux-mock-store": "^1.5.3"
   }
